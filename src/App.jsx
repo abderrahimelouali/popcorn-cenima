@@ -20,8 +20,15 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
-  const [watched, setWatched] = useState([]);
-
+  const [watched, setWatched] = useState(() => {
+    return JSON.parse(localStorage.getItem("WatchedList")) || [];
+  });
+  useEffect(
+    function () {
+      localStorage.setItem("WatchedList", JSON.stringify(watched));
+    },
+    [watched]
+  );
   useEffect(() => {
     if (query.length < 3) {
       setMovies([]);
@@ -89,10 +96,10 @@ export default function App() {
       }
     }
 
-    document.addEventListener('keydown', callback);
+    document.addEventListener("keydown", callback);
 
     return () => {
-      document.removeEventListener('keydown', callback);
+      document.removeEventListener("keydown", callback);
     };
   }, [selectedId, handleCloseMovie]);
 
